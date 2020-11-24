@@ -6,11 +6,12 @@ from tqdm import tqdm
 
 from google_directions import google_directions
 from sean_logger import setup_logging
-from twillo_info import alert_complete, alert_messge
+# from twillo_info import alert_complete, alert_messge
 
 key_file = "C:/Users/seang/OneDrive/api_keys/api_keys.json"
-in_data_file = "D:/Users/seang/Dropbox/Dropbox/Project Chad/Data For Holly/PolLocsFilteredForHolly_20191201_122250.csv"
+in_data_file = "C:/Users/seang/Desktop/distance_matrix HG Ed_sean_checks_v2.csv"
 results = "./directions/"
+outfile = "C:/Users/seang/Desktop/RESULTS_distance_matrix HG Ed_sean_checks_v2.csv"
 
 google_api_keys = json.load(open(key_file)).get("google_maps")
 bing_api_keys = json.load(open(key_file)).get("bing_maps")
@@ -38,8 +39,7 @@ for index, row in direction_data.iterrows():
         continue
     pol_loc_lon_lat = (row.pol_loc_lat, row.pol_loc_lon)
     pol_div_lon_lat = (row.pol_div_lat, row.pol_div_lon)
-    data = google_directions(pol_div_lon_lat, pol_loc_lon_lat, google_api_keys[0],
-                             name=name, outputFormat='json', units='metric', folder=results)
+    data = google_directions(pol_div_lon_lat, pol_loc_lon_lat, google_api_keys[0], name=name, outputFormat='json', units='metric', folder=results)
     if data is None:
         continue
     for mode, dist_types in data.items():
@@ -51,9 +51,10 @@ for index, row in direction_data.iterrows():
         logging.debug('writing to files')
         direction_data.to_csv("distance_matrix.csv", index=False)
         try:
-            direction_data.to_csv("D:/Users/seang/Dropbox/Dropbox/Project Chad/Data For Holly/distance_matrix.csv", index = False)
+            direction_data.to_csv(outfile, index = False)
         except:
             pass
-alert_complete()
+direction_data.to_csv(outfile, index = False)
+# alert_complete()
 
 print("Fin")

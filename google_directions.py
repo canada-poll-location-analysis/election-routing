@@ -18,11 +18,12 @@ def google_directions(start, stop, api_key, folder, name=None, outputFormat='jso
     gmaps = googlemaps.Client(key=api_key)
     travel_modes = ["driving", "walking", "transit"]  # , "bicycling", "transit"]
     departure_times = [
-        datetime.datetime(2019, 12, 16, 12, 00)
+        # datetime.datetime(2019, 12, 16, 12, 00)
+        datetime.datetime(2020, 11, 30, 12, 00)
     ]
     arrival_times = [
-        datetime.datetime(2019, 12, 16, 9, 30),
-        datetime.datetime(2019, 12, 16, 21, 30)
+        datetime.datetime(2019, 11, 30, 9, 30),
+        datetime.datetime(2019, 11, 30, 21, 30)
     ]
     data = defaultdict(dict)
     t_dot = {35007, 35018, 35019, 35020, 35021, 35024, 35027, 35028, 35081, 35090, 35093, 35094, 35095, 35096, 35097,
@@ -101,6 +102,8 @@ def get_driving_walking(name, mode, folder, start, stop, units, gmaps):
     if data_exists(name, mode, folder):
         logging.debug("getting_data")
         directions = get_data(name, mode, folder)
+        if len(directions) <= 0:
+            return None
         data[mode]['dist'] = directions[0]["legs"][0]["distance"]["value"]
         data[mode]['time'] = directions[0]["legs"][0]["duration"]["value"]
         return data
